@@ -35,7 +35,7 @@ class Home extends React.Component {
   }
 
   getContacts(){
-    fetch('http://127.0.0.1:8000/contacts-list/')
+    fetch('http://127.0.0.1:8000/contacts/contacts-list/')
     .then(response => response.json())
     .then(data => 
       this.setState({
@@ -87,10 +87,10 @@ class Home extends React.Component {
 
     var csrftoken = this.getCookie('csrftoken')
 
-    var url = 'http://127.0.0.1:8000/contacts-create/'
+    var url = 'http://127.0.0.1:8000/contacts/contacts-create/'
 
     if(this.state.update == true){
-      url = `http://127.0.0.1:8000/contacts-update/${ this.state.activeItem.id}/`
+      url = `http://127.0.0.1:8000/contacts/contacts-update/${ this.state.activeItem.id}/`
       this.setState({
         editing:false
       })
@@ -126,7 +126,7 @@ class Home extends React.Component {
 
   deleteItem(contact){
     var csrftoken = this.getCookie('csrftoken')
-    fetch(`http://127.0.0.1:8000/contacts-delete/${contact.id}/`, {
+    fetch(`http://127.0.0.1:8000/contacts/contacts-delete/${contact.id}/`, {
       method:'DELETE',
       headers:{
         'Content-type':'application/json',
@@ -153,7 +153,7 @@ class Home extends React.Component {
                             <input onChange={this.EmailChange} className="form-control" id="title" value={this.state.activeItem.email} type="text" name="title" placeholder="Contacts Email" />
                             <input onChange={this.NumberChange} className="form-control" id="title" value={this.state.activeItem.Number} type="text" name="title" placeholder="Contacts Number" />
                             <input id="submit" type="submit" name="Add" />
-                          </div>
+
                       </div>
                 </form>
              

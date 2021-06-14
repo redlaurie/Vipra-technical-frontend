@@ -9,8 +9,8 @@ function App() {
         <Router>
             <div className="App">
                 <Switch>
-                    <Route path="/home" component={Home} />
-                    <Route path="/" render={() => <Redirect to="/home" />} />
+                    <Route path="" component={Home} />
+                    <Route path="" render={() => <Redirect to="" />} />
                     <Route component={() => 404} />
                 </Switch>
             </div>
