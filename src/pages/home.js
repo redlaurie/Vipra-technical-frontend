@@ -11,6 +11,7 @@ class Home extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this)
       this.getCookie = this.getCookie.bind(this)
       this.Updating = this.Updating.bind(this)
+      this.deleteItem = this.deleteItem.bind(this)
   };
 
   getCookie(name) {
@@ -123,6 +124,20 @@ class Home extends React.Component {
   }
 
 
+  deleteItem(contact){
+    var csrftoken = this.getCookie('csrftoken')
+    fetch(`http://127.0.0.1:8000/contacts-delete/${contact.id}/`, {
+      method:'DELETE',
+      headers:{
+        'Content-type':'application/json',
+        'X-CSRFToken':csrftoken,
+      },
+    }).then((response) =>{
+
+      this.getContacts()
+    })
+  }
+
 
   render(){
     var contacts = this.state.Contacts
@@ -137,8 +152,8 @@ class Home extends React.Component {
                             <input onChange={this.NameChange} className="form-control" id="title" value={this.state.activeItem.name} type="text" name="title" placeholder="Contacts Name" />
                             <input onChange={this.EmailChange} className="form-control" id="title" value={this.state.activeItem.email} type="text" name="title" placeholder="Contacts Email" />
                             <input onChange={this.NumberChange} className="form-control" id="title" value={this.state.activeItem.Number} type="text" name="title" placeholder="Contacts Number" />
-
-                            <input type="submit" name="Add" />
+                            <input id="submit" type="submit" name="Add" />
+                          </div>
                       </div>
                 </form>
              
