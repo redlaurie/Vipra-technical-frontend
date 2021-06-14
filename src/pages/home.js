@@ -3,13 +3,14 @@ import React from 'react';
 class Home extends React.Component {
   constructor(props){
     super(props);
-      this.state = {Contacts:[],activeItem:{id:null,name:'',email:'',Number:''}}
+      this.state = {Contacts:[],activeItem:{id:null,name:'',email:'',Number:''},update:false,}
       this.getContacts = this.getContacts.bind(this)
       this.NameChange = this.NameChange.bind(this)
       this.EmailChange = this.EmailChange.bind(this)
       this.NumberChange = this.NumberChange.bind(this)
+      this.handleSubmit = this.handleSubmit.bind(this)
       this.getCookie = this.getCookie.bind(this)
-
+      this.Updating = this.Updating.bind(this)
   };
 
   getCookie(name) {
@@ -26,7 +27,7 @@ class Home extends React.Component {
         }
     }
     return cookieValue;
-  }
+}
 
   componentWillMount(){
     this.getContacts()
@@ -53,7 +54,6 @@ class Home extends React.Component {
       }
     })
   }
-
   EmailChange(e){
     var name = e.target.name
     var value = e.target.value
@@ -78,6 +78,51 @@ class Home extends React.Component {
       }
     })
   }
+
+
+  handleSubmit(e){
+    e.preventDefault()
+    console.log('ITEM:', this.state.activeItem)
+
+    var csrftoken = this.getCookie('csrftoken')
+
+    var url = 'http://127.0.0.1:8000/contacts-create/'
+
+    if(this.state.update == true){
+      url = `http://127.0.0.1:8000/contacts-update/${ this.state.activeItem.id}/`
+      this.setState({
+        editing:false
+      })
+    }
+
+    fetch(url, {
+      method:'POST',
+      headers:{
+        'Content-type':'application/json',
+        'X-CSRFToken':csrftoken,
+      },
+      body:JSON.stringify(this.state.activeItem)
+    }).then((response)  => {
+        this.getContacts()
+        this.setState({
+           activeItem:{
+        }
+        })
+    }).catch(function(error){
+      console.log('ERROR:', error)
+    })
+
+  }
+
+  Updating(contact){
+    console.log(contact)
+    this.setState({
+      activeItem:contact,
+      update:true,
+    })
+  }
+
+
 
   render(){
     var contacts = this.state.Contacts
@@ -107,6 +152,10 @@ class Home extends React.Component {
                                         <h1>{contact.name}</h1>
                                         <p>{contact.email}</p>
                                         <p>{contact.Number}</p>
+
+                                        <button onClick={() => self.Updating(contact)}>Edit</button>
+
+                                        <button onClick={() => self.deleteItem(contact)}>Delete</button>
                                 </div>
                           </div>
                         )
